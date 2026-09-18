@@ -1,1 +1,231 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حراج اليمن لأرخص السلع - المنصة الأولى للبيع والشراء</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+        body { font-family: 'Cairo', sans-serif; background-color: #f8fafc; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
 
+    <!-- شريط التنقل العلوي -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 space-x-reverse">
+                <div class="bg-red-600 text-white p-2.5 rounded-xl shadow-md">
+                    <i class="fa-solid fa-store text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-black text-red-600 tracking-tight">حراج اليمن</h1>
+                    <p class="text-xs text-slate-500 font-semibold">لأرخص السلع والسيارات</p>
+                </div>
+            </div>
+            <button onclick="openModal()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2.5 rounded-xl font-bold shadow-lg shadow-red-600/20 transition flex items-center space-x-2 space-x-reverse text-sm">
+                <i class="fa-solid fa-plus"></i>
+                <span>أضف إعلانك</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- الهيدر الترحيبى -->
+    <section class="bg-gradient-to-r from-red-600 to-rose-700 text-white py-8 px-4 text-center shadow-inner">
+        <div class="max-w-3xl mx-auto">
+            <h2 class="text-2xl md:text-3xl font-black mb-2">مرحباً بك في حراج اليمن لأرخص السلع</h2>
+            <p class="text-red-100 text-sm md:text-base">الوجهة الأفضل لبيع وشراء السيارات، العقارات، الجوالات، وكل ما تحتاجه بأفضل الأسعار وبكل ثقة وسرعة.</p>
+        </div>
+    </section>
+
+    <!-- شريط البحث والفلترة -->
+    <section class="max-w-7xl mx-auto px-4 -mt-5 w-full z-10 relative">
+        <div class="bg-white p-4 rounded-2xl shadow-xl border border-slate-100">
+            <div class="relative mb-4">
+                <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" id="searchInput" oninput="filterAds()" placeholder="ابحث عن سيارة، جوال، شقة، دراجة..." class="w-full pr-11 pl-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:border-red-500 focus:ring-2 focus:ring-red-500/20 text-sm">
+            </div>
+            <div class="flex gap-2 overflow-x-auto pb-1 scrollbar-none" id="categories">
+                <button onclick="setCategory('all')" class="cat-btn bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition shadow-sm">الكل</button>
+                <button onclick="setCategory('cars')" class="cat-btn bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">سيارات</button>
+                <button onclick="setCategory('realestate')" class="cat-btn bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">عقارات</button>
+                <button onclick="setCategory('phones')" class="cat-btn bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">جوالات وإلكترونيات</button>
+                <button onclick="setCategory('others')" class="cat-btn bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition">أخرى</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- قائمة الإعلانات -->
+    <main class="max-w-7xl mx-auto px-4 py-8 flex-grow w-full">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-black text-slate-800 flex items-center space-x-2 space-x-reverse">
+                <i class="fa-solid fa-fire text-red-600"></i>
+                <span>أحدث المعروضات والسلع</span>
+            </h3>
+            <span class="text-xs text-slate-400 font-semibold" id="adsCount">متاح حالياً</span>
+        </div>
+
+        <div id="adsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- سيتم تعبئة الإعلانات تلقائياً عبر JavaScript -->
+        </div>
+    </main>
+
+    <!-- نافذة إضافة إعلان (Modal) -->
+    <div id="adModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-black text-slate-800">إضافة إعلان جديد</h3>
+                <button onclick="closeModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center font-bold">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <form id="adForm" onsubmit="postAd(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">عنوان الإعلان</label>
+                    <input type="text" id="adTitle" required placeholder="مثال: تويوتا كورولا 2020 نظيفة جداً" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-red-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">القسم</label>
+                        <select id="adCategory" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-red-500">
+                            <option value="cars">سيارات</option>
+                            <option value="realestate">عقارات</option>
+                            <option value="phones">جوالات وإلكترونيات</option>
+                            <option value="others">أخرى</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-600 mb-1">السعر (بالريال اليمني / السعودي)</label>
+                        <input type="text" id="adPrice" required placeholder="مثال: 5000,000 ريال" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-red-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">المدينة / المنطقة</label>
+                    <input type="text" id="adLocation" required placeholder="مثال: صنعاء، عدن، تعز، شبوة..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">رقم الواتساب للتواصل</label>
+                    <input type="tel" id="adPhone" required placeholder="9677xxxxxxxx+" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">رابط صورة السلعة (رابط مباشر)</label>
+                    <input type="url" id="adImage" required placeholder="https://example.com/image.jpg" class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-red-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">تفاصيل السلعة</label>
+                    <textarea id="adDesc" rows="3" required placeholder="اكتب تفاصيل ومواصفات السلعة هنا..." class="w-full p-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-red-500"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl font-bold shadow-lg shadow-red-600/20 transition">نشر الإعلان فوراً</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- الفوتر -->
+    <footer class="bg-white border-t border-slate-200 py-6 mt-12 text-center text-xs text-slate-500">
+        <p>© 2026 حراج اليمن لأرخص السلع. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script>
+        let ads = JSON.parse(localStorage.getItem('yemen_ads')) || [
+            { id: 1, title: 'تويوتا هيلوكس موديل 2022 وكالة', category: 'cars', price: '45,000,000 ر.ي', location: 'صنعاء', phone: '967712345678', image: 'https://images.unsplash.com/photo-1559416523-140ddc3d238c?auto=format&fit=crop&w=600&q=80', desc: 'سيارة نظيفة جداً، قير أوتوماتيك، دبل، البدي وكالة.' },
+            { id: 2, title: 'آيفون 13 برو ماكس 256 جيجابايت', category: 'phones', price: '320,000 ر.ي', location: 'عدن', phone: '967771122334', image: 'https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=600&q=80', desc: 'الجهاز بحالة ممتازة مع الكرتون والشاحن الأصلي.' },
+            { id: 3, title: 'شقة مفروشة للإيجار الشهري', category: 'realestate', price: '150,000 ر.ي / شهرياً', location: 'تعز', phone: '967733445566', image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=600&q=80', desc: 'غرفتين وصالة ومطبخ وحمام، موقع هادئ وقريب من الخدمات.' }
+        ];
+
+        let currentCategory = 'all';
+
+        function renderAds(filteredAds = ads) {
+            const grid = document.getElementById('adsGrid');
+            document.getElementById('adsCount').innerText = `إجمالي (${filteredAds.length}) إعلان`;
+            
+            if (filteredAds.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-12 text-slate-400 font-semibold">لا توجد إعلانات مطابقة حالياً.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filteredAds.map(ad => `
+                <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-md transition flex flex-col justify-between">
+                    <div>
+                        <div class="relative h-48 bg-slate-100">
+                            <img src="${ad.image}" alt="${ad.title}" class="w-full h-full object-cover">
+                            <span class="absolute top-3 right-3 bg-black/60 backdrop-blur-md text-white text-[10px] px-3 py-1 rounded-full font-bold">
+                                <i class="fa-solid fa-location-dot ml-1"></i>${ad.location}
+                            </span>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-slate-800 text-base mb-1 line-clamp-1">${ad.title}</h4>
+                            <p class="text-red-600 font-black text-lg mb-2">${ad.price}</p>
+                            <p class="text-slate-500 text-xs mb-4 line-clamp-2">${ad.desc}</p>
+                        </div>
+                    </div>
+                    <div class="p-4 pt-0 flex gap-2">
+                        <a href="https://wa.me/${ad.phone}?text=مرحباً، أنا مهتم بإعلانك: ${encodeURIComponent(ad.title)}" target="_blank" class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white text-center py-2.5 rounded-xl font-bold text-xs transition flex items-center justify-center space-x-1 space-x-reverse">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                            <span>تواصل واتساب</span>
+                        </a>
+                        <button onclick="deleteAd(${ad.id})" class="bg-slate-100 hover:bg-red-50 text-slate-400 hover:text-red-600 px-3 py-2.5 rounded-xl transition text-xs">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn bg-slate-100 hover:bg-slate-200 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition";
+            });
+            event.target.className = "cat-btn bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition shadow-sm";
+            filterAds();
+        }
+
+        function filterAds() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = ads.filter(ad => {
+                const matchesCat = currentCategory === 'all' || ad.category === currentCategory;
+                const matchesQuery = ad.title.toLowerCase().includes(query) || ad.desc.toLowerCase().includes(query) || ad.location.toLowerCase().includes(query);
+                return matchesCat && matchesQuery;
+            });
+            renderAds(filtered);
+        }
+
+        function openModal() { document.getElementById('adModal').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('adModal').classList.add('hidden'); }
+
+        function postAd(e) {
+            e.preventDefault();
+            const newAd = {
+                id: Date.now(),
+                title: document.getElementById('adTitle').value,
+                category: document.getElementById('adCategory').value,
+                price: document.getElementById('adPrice').value,
+                location: document.getElementById('adLocation').value,
+                phone: document.getElementById('adPhone').value,
+                image: document.getElementById('adImage').value,
+                desc: document.getElementById('adDesc').value
+            };
+            ads.unshift(newAd);
+            localStorage.setItem('yemen_ads', JSON.stringify(ads));
+            renderAds();
+            closeModal();
+            document.getElementById('adForm').reset();
+            alert('تم نشر إعلانك بنجاح في حراج اليمن!');
+        }
+
+        function deleteAd(id) {
+            if (confirm('هل أنت متأكد من حذف هذا الإعلان؟')) {
+                ads = ads.filter(ad => ad.id !== id);
+                localStorage.setItem('yemen_ads', JSON.stringify(ads));
+                renderAds();
+            }
+        }
+
+        renderAds();
+    </script>
+</body>
+</html>
